@@ -1,7 +1,7 @@
 # Single NVIDIA GPU Passthrough
 I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090
  1. Enable IOMMU and SVM in your BIOS
-  Called something different for Intel
+ Called something different for Intel
  2. Edit /etc/default/grub
    GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt video=efifb:off quiet"
    video=efifb:off will disable GPU output during boot, also obviously this needs to be edited if you have an Intel CPU
@@ -29,9 +29,9 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090
 14. Download the VBIOS for your GPU and edit in a hex editor
   TechPowerUp has a bunch of VBIOSes
   Search for "VIDEO" and then to the left of that, find 55 AA. Delete everything before that.
-16. Move your edited VBIOS to /usr/share/vgabios
+15. Move your edited VBIOS to /usr/share/vgabios
   If the vgabios folder doesn't exist, create it. Do sudo chown *YOUR USERNAME*:*YOUR USERNAME* *YOUR VBIOS*.rom and sudo chmod 755 *YOUR VBIOS*.rom
-17. Do sudo virsh edit *YOUR VM NAME* and add the rom file
+16. Do sudo virsh edit *YOUR VM NAME* and add the rom file
   TODO: add steps for this
-18. Do sudo ./start.sh and it should work
-   
+17. Do sudo ./start.sh and it should work
+  You'll probably want to restart your display-manager but who needs desktops anyway?
