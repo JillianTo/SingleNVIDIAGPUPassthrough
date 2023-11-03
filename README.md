@@ -1,7 +1,7 @@
 # Single NVIDIA GPU Passthrough
 I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090
  1. Enable IOMMU and SVM in your BIOS
-    Called something different for Intel
+  Called something different for Intel
  2. Edit /etc/default/grub
    GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt video=efifb:off quiet"
    video=efifb:off will disable GPU output during boot, also obviously this needs to be edited if you have an Intel CPU
