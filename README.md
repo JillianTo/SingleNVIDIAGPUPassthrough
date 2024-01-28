@@ -34,7 +34,7 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
 16. Move your edited VBIOS to /usr/share/vgabios<br />
     If the vgabios folder doesn't exist, create it. Do sudo chown *YOUR USERNAME*:*YOUR USERNAME* *YOUR VBIOS*.rom and sudo chmod 755 *YOUR VBIOS*.rom<br />
 17. Do sudo virsh edit *YOUR VM NAME* and add the rom file<br />
-    Add \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\> after \<source\>\<address domain='0x0000' bus='0x03' slot='0xYOUR GPU PCI ADDR' function='0x0'\/\>\<\/source\>. You can get your GPU's PCI address by using lspci, and function 0x0 inside the source block should be the video part of the card. If it had 0x01 inside the source block, it's the audio part.<<br />
+    Add \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\> after \<source\>\<address domain='0x0000' bus='0x03' slot='0xYOUR GPU PCI ADDR' function='0x0'\/\>\<\/source\>. You can get your GPU's PCI address by using lspci, and function 0x0 inside the source block should be the video part of the card. If it had 0x01 inside the source block, it's the audio part.<br />
 18. Do sudo ./start.sh and it should work<br />
     Don't try and replace this with hooks, it doesn't work (unless it does for you...)<br />
     You'll probably want to restart your display-manager but who needs desktops anyway?<br />
