@@ -4,15 +4,16 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
     Called something different for Intel<br />
  2. Edit /etc/default/grub<br />
     GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=on iommu=pt video=efifb:off quiet"<br />
-    video=efifb:off will disable GPU output during boot, also obviously this needs to be edited if you have an Intel CPU<br />
- 3. Do sudo update-grub<br />
- 4. Do sudo usermod -aG *YOUR USERNAME* input kvm libvirt, then reboot your system<br />
- 5. Download ISO with virtio drivers: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso<br />
- 6. Download ISO for the operating system you're using<br />
+    video=efifb:off will disable GPU output during boot, you don't need that if you have another GPU.
+    Use something else instead of amd_iommu if you have an Intel CPU<br />
+ 4. Do sudo update-grub<br />
+ 5. Do sudo usermod -aG *YOUR USERNAME* input kvm libvirt, then reboot your system<br />
+ 6. Download ISO with virtio drivers: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso<br />
+ 7. Download ISO for the operating system you're using<br />
     I'm using the October 2023 build of Windows 11 x64<br />
- 7. OPTIONAL: Create an empty NTFS partition for Windows install<br />
+ 8. OPTIONAL: Create an empty NTFS partition for Windows install<br />
     Maybe improves performance over the virtual disk?<br />
- 8. Do sudo virt-manager and create a VM, don't passthrough GPU yet<br />
+ 9. Do sudo virt-manager and create a VM, don't passthrough GPU yet<br />
     TODO: Add steps for this<br />
     Set firmware to the UEFI option for your distro TODO: list what those are<br />
     If you're making a Windows 11 VM, choose the UEFI option with secboot in the name<br />
@@ -33,7 +34,7 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
 16. Move your edited VBIOS to /usr/share/vgabios<br />
     If the vgabios folder doesn't exist, create it. Do sudo chown *YOUR USERNAME*:*YOUR USERNAME* *YOUR VBIOS*.rom and sudo chmod 755 *YOUR VBIOS*.rom<br />
 17. Do sudo virsh edit *YOUR VM NAME* and add the rom file<br />
-    TODO: add steps for this<br />
+    Add <rom file='/usr/share/vgabios/YOUR VBIOS.rom'/> after <source><address domain='0x0000' bus='0x03' slot='0xYOUR GPU PCI ADDR' function='0x0'/></source>. You can get your GPU's PCI address by using lspci, and function 0x0 inside the source block should be the video part of the card. If it had 0x01 inside the source block, it's the audio part.<<br />
 18. Do sudo ./start.sh and it should work<br />
     Don't try and replace this with hooks, it doesn't work (unless it does for you...)<br />
     You'll probably want to restart your display-manager but who needs desktops anyway?<br />
