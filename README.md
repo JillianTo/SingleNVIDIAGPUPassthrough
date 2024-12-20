@@ -48,7 +48,7 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
     You can add your rom file below the address domain line so your source block looks like:<br />
     \<source\><br />
     &nbsp; &nbsp; \<address domain='0x0000' bus='0xSECOND PART OF YOUR GPU PCI ADDR' slot='0xTHIRD PART OF YOUR GPU PCI ADDR' function='0xFOURTH PART OF YOUR GPU PCI ADDR'\/\><br />
-    &nbsp; &nbsp; \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\>
+    &nbsp; &nbsp; \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\><br />
     \<\/source\><br />
 19. Do sudo ./start.sh and it should work<br />
     Don't try and replace this with hooks, it doesn't work (unless it does for you...)<br />
