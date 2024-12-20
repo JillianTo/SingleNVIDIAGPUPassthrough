@@ -45,11 +45,12 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
     If the vgabios folder doesn't exist, create it. Do sudo chown *YOUR USERNAME*:*YOUR USERNAME* *YOUR VBIOS*.rom and sudo chmod 755 *YOUR VBIOS*.rom<br />
 17. Do sudo virsh edit *YOUR VM NAME* and add the rom file<br />
     Look for the hostdev blocks, then find the one that matches the XML of the video part of your GPU that you passed through earlier.<br />
-    You can add your rom file below the address domain line so your source block looks like:<br />
+    You can add your rom file below the source block so the inside of your hostdev block looks like:<br />
     \<source\><br />
     &nbsp; &nbsp; \<address domain='0x0000' bus='0xSECOND PART OF YOUR GPU PCI ADDR' slot='0xTHIRD PART OF YOUR GPU PCI ADDR' function='0xFOURTH PART OF YOUR GPU PCI ADDR'\/\><br />
-    &nbsp; &nbsp; \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\><br />
     \<\/source\><br />
+    \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\><br />
+    \<address type='pci' domain='0x0000' bus='0xIDK HOW THIS IS PICKED' slot='0xIDK HOW THIS IS PICKED' function='0xIDK HOW THIS IS PICKED'/\><br />
 19. Do sudo ./start.sh and it should work<br />
     Don't try and replace this with hooks, it doesn't work (unless it does for you...)<br />
     You'll probably want to restart your display-manager but who needs desktops anyway?<br />
