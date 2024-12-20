@@ -26,16 +26,31 @@ I did all these steps on Debian 12 with a Ryzen 1700 and RTX 3090<br />
     Remove Display Spice, Channel Spice, Video QXL, and USB Redirect. If you can't remove it, do sudo virsh edit *YOUR VM NAME* and delete those parts from the XML<br />
     Passthrough USB devices (like your keyboard and mouse)<br />
     Passthrough GPU PCIE devices (both the video and audio parts)<br />
-14. Set hyperv vendor id and kvm hidden state<br />
-    TODO: Add steps for this<br />
+    When you passthrough the video part of your GPU, check the XML and take note of the bus, slot, and function numbers.
+14. Set hyperv vendor id and kvm hidden state
+    In the \<features\>...\</features\> block, add:<br />
+    \<hyperv mode='custom'\><br />
+    &nbsp; &nbsp; \<relaxed state='on'/\><br />
+    &nbsp; &nbsp; \<vapic state='on'/\><br />
+    &nbsp; &nbsp; \<spinlocks state='on' retries='8191'/\><br />
+    &nbsp; &nbsp; \<vendor_id state='on' value='amd'/\><br />
+    \</hyperv\><br />
+    \<kvm\><br />
+    &nbsp; &nbsp; \<hidden state='on'/\><br />
+    \</kvm\><br />
 15. Download the VBIOS for your GPU and edit in a hex editor<br />
     TechPowerUp has a bunch of VBIOSes<br />
     Search for "VIDEO" and then to the left of that, find 55 AA. Delete everything before that.<br />
 16. Move your edited VBIOS to /usr/share/vgabios<br />
     If the vgabios folder doesn't exist, create it. Do sudo chown *YOUR USERNAME*:*YOUR USERNAME* *YOUR VBIOS*.rom and sudo chmod 755 *YOUR VBIOS*.rom<br />
 17. Do sudo virsh edit *YOUR VM NAME* and add the rom file<br />
-    Add \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\> after \<source\>\<address domain='0x0000' bus='0xSECOND PART OF YOUR GPU PCI ADDR' slot='0xFIRST PART OF YOUR GPU PCI ADDR' function='0x0'\/\>\<\/source\>. You can get your GPU's PCI address by using lspci, and function 0x0 inside the source block should be the video part of the card. If it had 0x01 inside the source block, it's the audio part.<br />
-18. Do sudo ./start.sh and it should work<br />
+    Look for the hostdev blocks, then find the one that matches the XML of the video part of your GPU that you passed through earlier.<br />
+    You can add your rom file below the address domain line so your source block looks like:<br />
+    \<source\><br />
+    &nbsp; &nbsp; \<address domain='0x0000' bus='0xSECOND PART OF YOUR GPU PCI ADDR' slot='0xTHIRD PART OF YOUR GPU PCI ADDR' function='0xFOURTH PART OF YOUR GPU PCI ADDR'\/\><br />
+    &nbsp; &nbsp; \<rom file='/usr/share/vgabios/YOUR VBIOS.rom'\/\>
+    \<\/source\><br />
+19. Do sudo ./start.sh and it should work<br />
     Don't try and replace this with hooks, it doesn't work (unless it does for you...)<br />
     You'll probably want to restart your display-manager but who needs desktops anyway?<br />
-19. Install your GPU drivers in Windows
+20. Install your GPU drivers in Windows
